@@ -1,0 +1,79 @@
+.user-container {
+    margin-top: 40px
+}
+
+.user-category,
+.user-category-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start
+}
+
+.user-category-name, .user-password p {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.user-category-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.user-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.user-informations,
+.user-password {
+    width: 60%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    background-color: white;
+    padding: 20px 30px;
+    padding-left: 5%;
+    border-radius: 15px;
+    margin-left: 40px;
+    min-height: 330px;
+}
+
+.user-password-form {
+    width: 100%;
+    max-width: 500px
+}
+
+.user-category {
+    width: 30%;
+    background-color: white;
+    padding: 20px 30px;
+    border-radius: 15px
+}
+
+.user-category-item {
+    cursor: pointer
+}
+
+.user-category-item p {
+    margin-left: 10px;
+    cursor: pointer
+}
+
+.user-category-item:hover p {
+    color: #13C3B6;
+
+}
+
+.user-container label, .user-password label {
+    font-size: 20px;
+    font-weight: 600;
+    width: 120px
+}
+
+.user-container input, .user-informations textarea {
+    width: 100% !important;
+    max-width: 500px
+}
