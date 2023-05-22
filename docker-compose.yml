@@ -1,0 +1,73 @@
+version: '3.9'
+services:
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
+
+
+  users:
+    build: ./users
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    ports:
+      - 8000:8000
+    environment:
+      - AUTH_URL=postgresql://postgres:1234567890@db_auth:5432/db_auth
+    depends_on:
+      - db_auth
+
+  auth:
+    build: ./auth
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8002
+    ports:
+      - 8002:8002
+    environment:
+      - URL_USERS=http://users:8000
+      - URL_REDIS=redis
+      - URL_HANS3D=http://hans3d:8003
+    depends_on:
+      - redis
+      - users
+
+  hans3d:
+    build: ./hans3d
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8003
+    ports:
+      - 8003:8003
+    environment:
+      - DATABASE_URL=postgresql://postgres:1234567890@db_hans3d:5432/hans3d
+    depends_on:
+      - db_hans3d
+
+  db_hans3d:
+    platform: linux/amd64
+    container_name: postgresql_db_hans3d
+    image: postgres:12-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - data_hans3d_db:/var/lib/postgresql/data
+
+  db_auth:
+    platform: linux/amd64
+    container_name: db_auth
+    image: postgres:12-alpine
+    restart: always
+    ports:
+      - 5431:5432
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=db_auth
+    volumes:
+      - data_auth:/var/lib/postgresql/data_auth
+
+
+volumes:
+  data_hans3d_db:
+  data_auth:
