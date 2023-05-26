@@ -16,8 +16,8 @@ router = APIRouter(prefix="/api/auth", tags=['Authentication'],
 async def login_user(requset_body: LoginSchema, responses : Response):
     token = await AuthService.logins_service(requset_body)
     responses = JSONResponse(content={"detail":"Login successfully!"}, status_code=200, headers=token)
-    responses.set_cookie(key="access_token", value=token["access_token"], httponly=True, samesite="strict")
-    responses.set_cookie(key="refresh_token", value=token["refresh_token"], httponly=True, samesite="strict")
+    responses.set_cookie(key="access_token", value=token["access_token"], httponly=True, samesite="none", secure=True)
+    responses.set_cookie(key="refresh_token", value=token["refresh_token"], httponly=True, samesite="none", secure=True)
     return responses
 
 @router.post("/admin", response_model_exclude_none=True)
