@@ -11,6 +11,5 @@ export const loginProxy = async (loginInput: LoginInput) => {
   let loginJSON = JSON.stringify(loginData);
 
   let res = await loginApi(loginJSON);
-  document.cookie = `access_token=${access_token}`;
   return res;
 };
