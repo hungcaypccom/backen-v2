@@ -1,5 +1,5 @@
-export const BaseURL = "http://3dmed.vn:8002/api";
-export const BaseURLLocal = "http://loclahost:8002/api";
+export const BaseURL = "http://3dmed.vn/api";
+export const BaseURLLocal = "http://loclahost/api";
 
 export const TOKEN_KEY = "access_token";
 export const example_account = "994985849"
