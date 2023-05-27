@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/3dimex/static/css/main.c3bf5099.css",
+    "main.js": "/3dimex/static/js/main.44884582.js",
+    "static/media/logo.png": "/3dimex/static/media/logo.5618c5c2a163fbc4c844.png",
+    "static/media/login.svg": "/3dimex/static/media/login.742d160854c197ee634608872e13377a.svg",
+    "index.html": "/3dimex/index.html",
+    "main.c3bf5099.css.map": "/3dimex/static/css/main.c3bf5099.css.map",
+    "main.44884582.js.map": "/3dimex/static/js/main.44884582.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c3bf5099.css",
+    "static/js/main.44884582.js"
+  ]
+}
