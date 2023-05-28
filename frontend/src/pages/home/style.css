@@ -9,9 +9,22 @@
     margin-top: 80px;
 }
 
+.home-page-util {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.home-page-util .ant-select-selector {
+    height: 40px !important;
+    align-items: center;
+}
+
 .home-page-body-input {
     margin-bottom: 20px;
     height: 40px;
+    flex-grow: 1;
 }
 
 .home-page-header {

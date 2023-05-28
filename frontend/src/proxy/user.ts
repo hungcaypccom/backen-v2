@@ -17,17 +17,17 @@ export const getUserProfileProxy = async () => {
 export const editUserProfileProxy = async (param: UserProfile) => {
   let res = await editUserProfileApi(param);
   if (res.status === 200) {
-    return res.data.result;
+    return true;
   } else {
-    return null;
+    return false;
   }
 };
 
 export const editUserPasswordProxy = async (param: PasswordStruct) => {
   let res = await editUserPasswordApi(param);
   if (res.status === 200) {
-    return res.data.result;
+    return true;
   } else {
-    return null;
+    return false;
   }
 };

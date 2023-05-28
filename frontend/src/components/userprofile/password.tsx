@@ -52,7 +52,20 @@ const Password: React.FC = () => {
           />
         </Form.Item>
         <Form.Item
-          rules={[{ required: true }]}
+          rules={[
+            {
+              required: true,
+              message: 'Please confirm your password!',
+            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('new_password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('The two passwords that you entered do not match!'));
+              },
+            }),
+          ]}
           name="new_password_confirm"
           label="New password"
         >

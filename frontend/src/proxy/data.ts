@@ -27,8 +27,8 @@ export const downloadFileProxy = async (fileId: string) => {
 export const deleteFileProxy = async (fileId: string) => {
   let res = await deleteFileApi(fileId);
   if (res.status === 200) {
-    return res.data.result;
+    return true;
   } else {
-    return null;
+    return false;
   }
 };
