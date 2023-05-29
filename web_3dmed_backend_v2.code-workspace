@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../web_server_3dmed_start"
+		},
+		{
+			"path": "../../../Desktop/testhtml"
+		},
+		{
+			"path": "../docker-db"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "testhtml"
+	}
+}
