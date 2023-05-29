@@ -18,7 +18,7 @@ const Password: React.FC = () => {
       <p>Update password</p>
       <Form
         onFinish={(value) => {
-          if (value.new_password === value.old_password) {
+          if (value.new_password === value.old_password && value.new_password !== "") {
             mutation.mutate({
               new_password: value.new_password,
               old_password: value.old_password,

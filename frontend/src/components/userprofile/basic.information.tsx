@@ -32,9 +32,11 @@ const Information: React.FC = () => {
   });
 
   const initValue = {
-    name: dataQuery.isError ? "" : dataQuery.data?.name,
-    phone: dataQuery.isError ? "" : dataQuery.data?.phone_number,
-    address: dataQuery.isError ? "" : dataQuery.data?.adress,
+    name: dataQuery.isSuccess ? dataQuery.data?.name : "",
+    phone: dataQuery.isSuccess ? dataQuery.data?.phone_number : "",
+    address: dataQuery.isSuccess ? dataQuery.data?.adress : "",
+    website: dataQuery.isSuccess ? dataQuery.data?.website : "",
+
   };
   return (
     <div className="user-informations">
@@ -52,6 +54,13 @@ const Information: React.FC = () => {
           rules={[{ required: true }]}
           name="phone_number"
           label="Phone"
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          rules={[{ required: true }]}
+          name="website"
+          label="Website"
         >
           <Input />
         </Form.Item>

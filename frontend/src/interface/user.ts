@@ -1,6 +1,6 @@
 export interface UserProfile {
   name: string;
-  profile: string;
+  website: string;
   phone_number: string;
   adress: string;
 }

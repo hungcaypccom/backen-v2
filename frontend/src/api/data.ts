@@ -11,21 +11,11 @@ export const getDataApi = async (param: GetDataParam): Promise<any> => {
 };
 
 export const downloadFileApi = async (fileId: string): Promise<any> => {
-  const token = localStorage.getItem(TOKEN_KEY);
   const url = "/users/download-file";
-  return userInstance.post(url, fileId, {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  });
+  return userInstance.post(url, fileId);
 };
 
 export const deleteFileApi = async (fileId: string): Promise<any> => {
-  const token = localStorage.getItem(TOKEN_KEY);
   const url = "/users/delete-file";
-  return userInstance.post(url, fileId, {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  });
+  return userInstance.post(url, fileId);
 };

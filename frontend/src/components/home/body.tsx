@@ -20,7 +20,7 @@ const Main: React.FC = () => {
   };
 
   const dataQuery = useQuery({
-    queryKey: ["data"],
+    queryKey: ["data", downloadable],
     queryFn: getDataTable,
   });
 
