@@ -8,7 +8,7 @@ import {
 export const getUserProfileProxy = async () => {
   let res = await getUserProfileApi();
   if (res.status === 200) {
-    return res.data.result;
+    return res.data.detail;
   } else {
     return {};
   }

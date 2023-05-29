@@ -9,7 +9,7 @@ import {
 export const getDataProxy = async (param: GetDataParam) => {
   let res = await getDataApi(param);
   if (res.status === 200) {
-    return res.data.result;
+    return res.data.detail;
   } else {
     return [];
   }
@@ -18,7 +18,7 @@ export const getDataProxy = async (param: GetDataParam) => {
 export const downloadFileProxy = async (fileId: string) => {
   let res = await downloadFileApi(fileId);
   if (res.status === 200) {
-    return res.data.result;
+    return true;
   } else {
     return null;
   }
