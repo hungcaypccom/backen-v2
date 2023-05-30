@@ -1,27 +1,27 @@
 # auth
-./auth/env
-./auth/app/__pycache__
-./auth/app/api/__pycache__
-./auth/app/auth/__pycache__
-./auth/app/db/__pycache__
-./auth/app/middleware/__pycache__
-./auth/app/service/__pycache__
+/auth/env
+/auth/app/__pycache__
+/auth/app/api/__pycache__
+/auth/app/auth/__pycache__
+/auth/app/db/__pycache__
+/auth/app/middleware/__pycache__
+/auth/app/service/__pycache__
 # hans3d
 
-./hans3d/env
-./hans3d/requirements1.txt
-./hans3d/app/__pycache__
-./hans3d/app/api/__pycache__
-./hans3d/app/auto_download/__pycache__
-./hans3d/app/client_download/__pycache__
-./hans3d/app/db/__pycache__
-./hans3d/app/hans3d_server/__pycache__
+/hans3d/env
+/hans3d/requirements1.txt
+/hans3d/app/__pycache__
+/hans3d/app/api/__pycache__
+/hans3d/app/auto_download/__pycache__
+/hans3d/app/client_download/__pycache__
+/hans3d/app/db/__pycache__
+/hans3d/app/hans3d_server/__pycache__
 
 
 # users
 
-./users/env
-./users/app/__pycache__
-./users/app/api__pycache__
-./users/app/db__pycache__
+/users/env
+/users/app/__pycache__
+/users/app/api__pycache__
+/users/app/db__pycache__
 
