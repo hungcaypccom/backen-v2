@@ -1,8 +1,13 @@
 from fastapi import FastAPI, APIRouter
 from app.db.db import metadata, database, engine
 from app.db.models import InfoData, Account
+<<<<<<< HEAD
 from app.db.db_infoData_manager import add_infoData, update_infoData, delete_infoData, get_all_infoData, get_infoData_by_accountNo, get_total_by_accountNo
 from app.db.db_account_manager import add_account, get_all_account, delete_account
+=======
+
+
+>>>>>>> origin/hung
 from app.auto_download.auto_download_service import AutoDownloadService
 from app.auto_download import config as AutoDownloadConfig
 from app.api import service
@@ -39,6 +44,7 @@ async def startup():
 async def shutdown():
     await database.disconnect()
 
+<<<<<<< HEAD
 @app.get("/")
 async def index():
     return ("hello world") 
@@ -95,6 +101,20 @@ async def create():
 async def create():
     result = await AutoDownloadService.download()
     return result
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> origin/hung
 
 @app.get("/os")
 async def create():

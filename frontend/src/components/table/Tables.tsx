@@ -15,6 +15,7 @@ export const Tables: React.FC<Props> = ({ columns, tableData, rowKey }) => {
         dataSource={tableData}
         scroll={{ y: 800 }}
         bordered
+        pagination={false}
       />
     </>
   );

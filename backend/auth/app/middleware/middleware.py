@@ -33,23 +33,19 @@ class CookieAuth_RefreshToken():
             )
 
 class Cookie_Auth_Admin(): 
+        
     def __call__(self, request: Request):
         credentials = request.cookies.get("access_token")
         if credentials:
             token = JWTRepo(token = credentials).decode_access_token()
-            try:
-                if token["role"] == "admin":
-                    return token
-                else:
-                    raise HTTPException (
-                    status_code=403, detail="Using user's token!"
-                    )
-            except:
+            if token["role"] == "admin":
+                return token
+            else: 
                 raise HTTPException (
-                status_code=500, detail="Internal server error"
-                )
+                            status_code=401, detail="Using wrong token"
+                            )   
         else:
             raise HTTPException (
             status_code=401, detail="Missing authorization token"
-            )
-        
+                )
+

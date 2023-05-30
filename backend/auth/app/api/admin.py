@@ -1,15 +1,14 @@
-from fastapi import APIRouter,Depends,Security, Response
-from app.client_download import client_download
-from app.schema import ResponseSchema, RegisterSchema, LoginSchema, ForgotPasswordSchema
-from app.repository.auth_repo import JWTBearer, JWTRepo, JWTBearerAdmin
-from fastapi.security import HTTPAuthorizationCredentials
-from app.service.user_service import UserService
-from app.service.person_service import PersonService
-from app.service import role_service
-from app.schema import ResponseSchema, RegisterSchema, LoginSchema, ForgotPasswordSchema, UpdateSchema
-from app.service.auth_service import AuthService
-from app.service import info_data_service
-from app.middleware.middleware import CookieAuth_RefreshToken_Admin, Cookie_Auth_Admin
+
+from fastapi import APIRouter,Depends,Security, Response, Body
+from fastapi.responses import JSONResponse
+from app.middleware.middleware import Cookie_Auth_Admin
+from app.service.service_admin import get_all_user, get_user, register_user, update_password, delete_user, update_user
+from app.service.service_admin import get_infoData_by_accountNo, get_infoData_by_downloadable, get_infoData_by_status,get_total_infoData_by_accountNo
+from app.service.service_admin import get_total_infoData_by_downloadable, get_total_infoData_by_status, update_infoData, delete_file, download_file
+from app.service.service_admin import add_hans3d_account, delete_hans3d_account, get_all_hans3d_account
+from app.auth.model import Register, UserUpdate, Account
+
+from app.middleware.middleware import Cookie_Auth_Admin
 
 router = APIRouter(
     prefix="/admin",
@@ -17,93 +16,92 @@ router = APIRouter(
     dependencies=[Depends(Cookie_Auth_Admin())]
 )
 
-@router.get("/", response_model=ResponseSchema, response_model_exclude_none=True)
-async def get_user_profile(credentials= Security(Cookie_Auth_Admin())):
-    result = await UserService.get_user_profile_user(credentials["username"])
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully get user" }, result=result)
 
-@router.post("/register", response_model=ResponseSchema, response_model_exclude_none=True)
-async def register(request_body: RegisterSchema):
-    await AuthService.register_service(request_body)
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully regiester user" })
+@router.post("/register-user", response_model_exclude_none=True)
+async def admin(request_body: Register):
+    return await register_user(request_body)
 
-@router.post("/update-user-details", response_model=ResponseSchema, response_model_exclude_none=True)
-async def register(request_body: RegisterSchema):
-    await PersonService.update_person(request_body)
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully update user" })
+@router.post("/update-user", response_model_exclude_none=True)
+async def admin(request_body: UserUpdate):
+    return await update_user(request_body)
 
-@router.post("/forgot-password", response_model=ResponseSchema, response_model_exclude_none=True)
-async def forgot_password(request_body: ForgotPasswordSchema):
-    await AuthService.forgot_password_service(request_body)
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully update password" })
-
-@router.post("/chage-status-infoData")
-async def chageStatusInfoData(uploadTimeStr,status:bool ,downloadable:bool):
-    await info_data_service.InFoDataService.update_status_downloadable(uploadTimeStr, status, downloadable)
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully changed" })
-
-@router.post("/find-infoData")
-async def findInfoData(uploadTimeStr):
-    result = await info_data_service.InFoDataService.find_by_str(uploadTimeStr)
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully find infodata" }, result= result)
-
-@router.post("/find-info-data-by-status")
-async def findstatus(status:bool):
-    result = await info_data_service.InFoDataService.find_by_status(status)
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully find infodata by status" }, result= result)
+@router.post("/delete-user", response_model_exclude_none=True)
+async def admin(username: str):
+    return await delete_user(username)
 
 
-@router.post("/find-info-data-by-downloadable")
-async def findstatus(downloadable:bool):
-    result = await info_data_service.InFoDataService.find_by_downloadable(downloadable)
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully find infodata by downloadable" }, result= result) 
-
-@router.get("/get-all-account")
-async def getallaccount():
-    result = await UserService.find_account_all()
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully get all account" }, result= result)
-
-@router.post("/update-data-info-by-user")
-async def updatedatainfobyuser(username, status:bool, downloadable: bool):
-    results = await info_data_service.InFoDataService.find_by_user(username)
-    for result in results:
-        await info_data_service.InFoDataService.update_status_downloadable(result.uploadTimeStr, status, downloadable)
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully update infodata" })
+@router.post("/update-password", response_model_exclude_none=True)
+async def admin(username, new_password):
+     return await update_password(username, password=new_password )
 
 
-@router.get("/data-info-find-all")
-async def datainfofindall():
-    result = await info_data_service.InFoDataService.find_all()
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully get all infodata" }, result=result)
+@router.get("/get-all-user", response_model_exclude_none=True)
+async def admin(credentials= Security(Cookie_Auth_Admin())):
+    return await get_all_user()
+
+@router.get("/get-user", response_model_exclude_none=True)
+async def admin(username):
+    return await get_user(username)
 
 
-@router.get("/user_details", response_model=ResponseSchema, response_model_exclude_none=True)
-async def get_user_profile(username):
-    result = await UserService.get_user_profile_role_user(username)
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully get user details" }, result=result)
+
+###############  infodata    ###########
 
 
-@router.get("/user_all")
-async def getallaccount():
-    accounts = await UserService.find_account_all()
-    results = []
-    for account in accounts:
-        result = await UserService.get_user_profile_role_user(account.username)
-        results.append(result)
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully get all users" }, result=results)
+@router.get("/get-infoData-by-accountNo", response_model_exclude_none=True)
+async def info(username: str, page: int, count: int, downloadable: bool):
+    return await get_infoData_by_accountNo(accountNo = username, page = page, count = count, downloadable = downloadable)
 
-@router.post("/delete-file")
-async def delete_file(response: Response, datalist: list[str], username):
-    result = await client_download.client_delete_file(datalist, username)
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully delete files" }, result=result)
+@router.get("/get-total-infoData-by-accountNo", response_model_exclude_none=True)
+async def info(username: str, downloadable: bool):
+    return await get_total_infoData_by_accountNo(username, downloadable)
 
 
-@router.get("/data-info-total-count",response_model=ResponseSchema, response_model_exclude_none=True)
-async def data_info_total_count(downloadable:bool, username):
-    result = await info_data_service.InFoDataService.find_by_user_total_count(username, downloadable)
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully get total count" }, result=result)
-    
-@router.get("/data-info-pagging",response_model=ResponseSchema, response_model_exclude_none=True)
-async def data_info_pagging(downloadable:bool, page:int, count:int, username ):
-    result = await info_data_service.InFoDataService.find_by_user_pagging(username, page, count, downloadable)
-    return ResponseSchema(detail={"status":"Successfully", "message":"Successfully get data" }, result=result)
+@router.get("/get-infoData-by-downloadable", response_model_exclude_none=True)
+async def info(page: int, count: int, downloadable: bool):
+    return await get_infoData_by_downloadable(page, count, downloadable)
+
+@router.get("/get-total-infoData-by-downloadable", response_model_exclude_none=True)
+async def info(downloadable: bool):
+    return await get_total_infoData_by_downloadable(downloadable)
+
+@router.get("/get-infoData-by-status", response_model_exclude_none=True)
+async def info(page: int, count: int, status: bool):
+    return await get_infoData_by_status(page, count, status)
+
+@router.get("/get-total-infoData-by-status", response_model_exclude_none=True)
+async def info(status: bool):
+    return await get_total_infoData_by_status(status)
+
+@router.get("/download-file", response_model_exclude_none=True)
+async def info(uploadTimeStr, username):
+    return await download_file(uploadTimeStr, username)
+
+
+@router.post("/delete-file", response_model_exclude_none=True)
+async def info(username, data:list[str]):
+    return await delete_file(username, data)
+
+@router.post("/update-infoData", response_model_exclude_none=True)
+async def info(uploadTimeStr: str ,status: bool, downloadable:bool):
+    return await update_infoData(uploadTimeStr, status, downloadable)
+
+
+
+################ hans3d account ######################
+
+
+@router.post("/add-hans3d-account", response_model_exclude_none=True)
+async def hans3d_account(payload: Account):
+    return await add_hans3d_account(payload)
+
+@router.post("/delete-hans3d-account", response_model_exclude_none=True)
+async def hans3d_account(username):
+    return await delete_hans3d_account(username)
+
+
+@router.post("/get-all-hans3d-account", response_model_exclude_none=True)
+async def hans3d_acoount():
+    return await get_all_hans3d_account()
+
+

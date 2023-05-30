@@ -1,6 +1,7 @@
 
 #config for API form hans's server
-
+import os
+from app.config import datafolder
 class Config:
 
     URL_login = "http://47.243.175.209:8080/EX-PRO/accLogin"
@@ -25,4 +26,5 @@ class Config:
     }
 
 # indicating the path to storge data downloaded, must be same with the config file of client_download module
-    datafolder = "/Users/hungnguyenminh/Learning/Python/datas"
+    #datafolder = os.getenv('DATA_FOLDER')
+    datafolder = datafolder

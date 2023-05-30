@@ -22,3 +22,34 @@ class PersonUpdate(BaseModel):
 
 class Account(BaseModel):
     accountNo: str
+<<<<<<< HEAD
+=======
+
+class Register(BaseModel):
+
+    username: str
+    password: str
+    role: str
+    name:str
+    date_start:str
+    date_end:str
+    phone_number:str
+    adress:str
+    website:str
+    source: str
+
+class UserUpdate(BaseModel):
+
+    username: str
+    role: str
+    name:str
+    date_start:str
+    date_end:str
+    phone_number:str
+    adress:str
+    website:str
+    source: str
+
+class Account(BaseModel):
+    accountNo: str
+>>>>>>> origin/hung

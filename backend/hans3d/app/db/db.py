@@ -1,9 +1,7 @@
 from sqlalchemy import (Column, Integer, MetaData, String, Table, Boolean, create_engine, ARRAY, func, select)
 from databases import Database
-import os
+from app.config import DATABASE_URL
 
-#DATABASE_URL = 'postgresql://postgres:1234567890@localhost:5431/hans3d'
-DATABASE_URL = os.getenv('DATABASE_URL')
 
 engine = create_engine(DATABASE_URL)
 metadata = MetaData()

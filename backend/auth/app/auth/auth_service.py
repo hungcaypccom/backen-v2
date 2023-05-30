@@ -1,5 +1,5 @@
 from app.auth.model import LoginSchema
-from app.service.service_users import find_by_username
+from app.service.service_common import find_by_username
 from datetime import date
 from fastapi import HTTPException
 from passlib.context import CryptContext
@@ -21,6 +21,9 @@ class AuthService:
             if datetime.strptime(_username["date_end"], '%Y-%m-%dT%H:%M:%S') < datetime.today():
                raise HTTPException(
                     status_code=403, detail="Account Expired!")
+            if _username["role"] != "user":
+                raise HTTPException(
+                    status_code=403, detail="You are not User!")
             if not pwd_context.verify(login.password, _username["password"]):
                 raise HTTPException(
                     status_code=400, detail="Invalid password")
@@ -35,17 +38,17 @@ class AuthService:
 
     @staticmethod
     async def admin_only_logins_service(login: LoginSchema):
-        _username = await find_by_username(login.username)
+        _username = (await find_by_username(login.username)).json()
         if _username is not None:
-            if _username.date_end < date.today():
+            if datetime.strptime(_username["date_end"], '%Y-%m-%dT%H:%M:%S') < datetime.today():
                raise HTTPException(
                     status_code=403, detail= "Account Expired!")
-            if (_username.role == "admin"):
-                if not pwd_context.verify(login.password, _username.password):
+            if (_username["role"] == "admin"):
+                if not pwd_context.verify(login.password, _username['password']):
                     raise HTTPException(
                     status_code=400, detail="Invalid password")
-                token = { "access_token": JWTRepo(data={"username": _username.username, "role":_username.role}).generate_access_token()
-                     , "refresh_token": JWTRepo(data={"username": _username.username, "role": "admin"}).generate_refresh_token()
+                token = { "access_token": JWTRepo(data={"username": _username["username"], "role":_username["role"]}).generate_access_token()
+                     , "refresh_token": JWTRepo(data={"username": _username["username"], "role":_username["role"]}).generate_refresh_token()
                     }
                 await set_value(_username["username"], token["refresh_token"])
                 return token

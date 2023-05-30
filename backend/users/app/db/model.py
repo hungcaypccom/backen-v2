@@ -18,7 +18,6 @@ class Register(BaseModel):
 class UserUpdate(BaseModel):
 
     username: str
-    password: str
     role: str
     name:str
     date_start:str

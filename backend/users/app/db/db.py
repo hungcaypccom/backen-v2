@@ -3,9 +3,8 @@ from sqlalchemy import (Column, Integer, MetaData, String, Table
 from databases import Database
 from pydantic import BaseModel
 import os
+from app.config import DATABASE_URL
 
-#DATABASE_URL = 'postgresql://postgres:1234567890@localhost:5432/db_auth'
-DATABASE_URL = os.getenv('AUTH_URL')
 
 engine = create_engine(DATABASE_URL)
 metadata = MetaData()

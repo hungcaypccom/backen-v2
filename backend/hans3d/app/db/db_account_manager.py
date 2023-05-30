@@ -9,10 +9,17 @@ async def add_account(payload: Account):
     except: 
         raise HTTPException (status_code=500, detail="Internal Server Error")
     
-async def delete_account(id: int):
-    query = account.delete().where(account.c.id==id)
-    return await database.execute(query=query)
+async def delete_account(accountNo):
+    query = account.delete().where(account.c.accountNo==accountNo)
+    try:
+        return await database.execute(query=query)
+    except: 
+        raise HTTPException (status_code=500, detail="Internal Server Error")
+    
 
 async def get_all_account():
     query = account.select()
-    return await database.fetch_all(query=query)
+    try:
+        return await database.fetch_all(query=query)
+    except: 
+        raise HTTPException (status_code=500, detail="Internal Server Error")

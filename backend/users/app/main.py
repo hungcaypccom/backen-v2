@@ -1,16 +1,25 @@
 from fastapi import FastAPI, APIRouter
 from app.db.db import metadata, database, engine
+<<<<<<< HEAD
 from app.db.db_role_manager import register_role, find_by_name_role, generate_role
 from app.db.db_user_manager import admin_only_register_user, update_password_user, admin_ony_delete_user, admin_only_get_user
 from app.db.db_user_manager import admin_only_update_password_user, admin_only_update_user,update_user, get_user, admin_only_get_all_user
 from app.api import  user, admin
 from app.db.model import Register, Role, PersonUpdate, UserUpdate
+=======
+from app.db.db_role_manager import generate_role
+from app.api import  user, admin
+>>>>>>> origin/hung
 
 metadata.create_all(engine)
 
 app = FastAPI()
 router = APIRouter
+<<<<<<< HEAD
 Role = Role(role="user")
+=======
+
+>>>>>>> origin/hung
 
 @app.on_event("startup")
 async def startup():
@@ -21,6 +30,7 @@ async def startup():
 async def shutdown():
     await database.disconnect()
 
+<<<<<<< HEAD
 
 @app.post("/register-role")
 async def create():
@@ -81,5 +91,7 @@ async def create(username):
 
 
 
+=======
+>>>>>>> origin/hung
 app.include_router(user.router)
 app.include_router(admin.router)

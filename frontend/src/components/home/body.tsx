@@ -1,14 +1,19 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Button, Popconfirm, Select } from "antd";
 import Input from "antd/es/input/Input";
 import { ColumnsType } from "antd/es/table";
 import { Tables } from "components/table/Tables";
 import { Data } from "interface/data";
 import { deleteFileProxy, downloadFileProxy, getDataProxy } from "proxy/data";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useInView } from 'react-intersection-observer'
+
+
 const Main: React.FC = () => {
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const { ref, inView } = useInView()
   const [downloadable, setDownloadable] = useState(true)
   const getDataTable = async () => {
     const res = await getDataProxy({
@@ -19,9 +24,23 @@ const Main: React.FC = () => {
     return res;
   };
 
-  const dataQuery = useQuery({
+const {
+    status,
+    data,
+    error,
+    isFetching,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+  }  = useInfiniteQuery({
     queryKey: ["data", downloadable],
     queryFn: getDataTable,
+  
+      getPreviousPageParam: (firstPage) => firstPage.previousId ?? undefined,
+      getNextPageParam: (lastPage) => lastPage.nextId ?? undefined,
   });
 
   const handleDownload = async (fileId: string) => {
@@ -33,14 +52,21 @@ const Main: React.FC = () => {
   };
 
   const handleSearch = () => {
-    console.log("data", dataQuery.data);
-    if(Boolean(dataQuery.data))
-      return dataQuery.data.filter((data: Data) => {
+    if(data !== undefined && Array.isArray(data)) {
+      return data.filter((v: Data) => {
         return (
-          data.name.toLowerCase().includes(search) || data.phone.includes(search)
+          v.name.toLowerCase().includes(search) || v.phone.includes(search)
         );
       });
+    }
   };
+
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage()
+    }
+  }, [inView])
+
 
   const columns: ColumnsType<any> = [
     {
@@ -138,6 +164,15 @@ const Main: React.FC = () => {
         columns={columns}
         tableData={handleSearch()}
       />
+      <div
+              ref={ref}
+            >
+              {isFetchingNextPage
+                ? 'Loading more...'
+                : hasNextPage
+                ? 'Load Newer'
+                : 'Nothing more to load'}
+            </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import redis
-import os
+from app.config import URL_REDIS
 
-URL_REDIS = os.getenv('URL_REDIS')
+
 r = redis.Redis(host=URL_REDIS, port=6379, db=0)
 
 async def set_value(key:str, value:str):

@@ -61,10 +61,10 @@ class JWTRepo:
             return decode_token #if decode_token["exp"] >= datetime.time() else None
         except ExpiredSignatureError:
             raise HTTPException(
-                status_code=401, detail={"status": 401, "message": "Expired access token!"})
+                status_code=401, detail="Expired access token!")
         except JWTError:
             raise HTTPException(
-                status_code=403, detail={"status": 403, "message": "Invalid authentication access token!"})
+                status_code=403, detail="Invalid authentication access token!")
         
     def decode_refresh_token(self):
         try:
@@ -73,9 +73,9 @@ class JWTRepo:
             return decode_token #if decode_token["exp"] >= datetime.time() else None
         except ExpiredSignatureError:
             raise HTTPException(
-                status_code=401, detail={"status": 401, "message": "Expired refresh token!"})
+                status_code=401, detail="Expired refresh token!")
         except JWTError:
             raise HTTPException(
-                status_code=403, detail={"status": 403, "message": "Invalid authentication refresh token!"})
+                status_code=403, detail="Invalid authentication refresh token!")
 
   

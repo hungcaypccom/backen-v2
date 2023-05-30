@@ -57,10 +57,11 @@ async def admin_only_update_user(payload: UserUpdate):
                       phone_number=payload.phone_number, adress=payload.adress, website=payload.website)
         await admin_only_update_person(_username.persons_id, _person)
     
-        _user = User(username = payload.username, roles_id=_role.id, source=payload.source, persons_id=_username.persons_id)
+        _user = User(username = payload.username, roles_id=_role.id, source=payload.source, persons_id=_username.persons_id, password=_username.password)
         query = users.update().values(**_user.dict())
         return await database.execute(query=query)
-    except:
+    except Exception as er:
+        print(er)
         print("error in admin_only_update_user")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 

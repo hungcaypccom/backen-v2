@@ -1,6 +1,6 @@
 from app.auto_download import function, config
 from app.hans3d_server import Service
-from app.db.db_infoData_manager import update_infoData, get_infoData_by_status
+from app.db.db_infoData_manager import update_infoData, get_infoData_by_status_all
 from app.db.db_account_manager import get_all_account
 import asyncio
 
@@ -37,7 +37,7 @@ class AutoDownloadService:
     @staticmethod
     async def download():
         try:
-            downloads = await get_infoData_by_status(False)
+            downloads = await get_infoData_by_status_all(False)
             for download in downloads:
                 print(download.uploadTimeStr)
                 if await Service.download(download.uploadTimeStr, download.accountNo, config.timeout_download_data):
