@@ -32,11 +32,10 @@ const Information: React.FC = () => {
   });
 
   const initValue = {
-    name: dataQuery.isSuccess ? dataQuery.data?.name : "",
-    phone: dataQuery.isSuccess ? dataQuery.data?.phone_number : "",
-    address: dataQuery.isSuccess ? dataQuery.data?.adress : "",
-    website: dataQuery.isSuccess ? dataQuery.data?.website : "",
-
+    name: Boolean(dataQuery.data) ? dataQuery.data?.name : "",
+    phone: Boolean(dataQuery.data) ? dataQuery.data?.phone_number : "",
+    address: Boolean(dataQuery.data) ? dataQuery.data?.adress : "",
+    website: Boolean(dataQuery.data) ? dataQuery.data?.website : "",
   };
   return (
     <div className="user-informations">
@@ -68,7 +67,7 @@ const Information: React.FC = () => {
           <TextArea rows={4} />
         </Form.Item>
         <Form.Item>
-          <Button type="primary">Save</Button>
+          <Button htmlType="submit" type="primary">Save</Button>
         </Form.Item>
       </Form>
     </div>

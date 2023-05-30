@@ -1,13 +1,15 @@
 import { Popover } from "antd";
 import { TOKEN_KEY } from "config";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import loinIcon from "../../assets/login.svg";
 import logoIcon from "../../assets/logo.png";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-
+  const location = useLocation()
+  console.log("location", location);
+  
   const popoverContent = (
     <>
       <span
@@ -28,13 +30,13 @@ const Header: React.FC = () => {
       </div>
       <div className="home-page-navigate">
         <Link to={"/"}>
-          <span className="home-page-active">Home</span>
+          <span className={location.pathname == "/" ? `home-page-active`:""}>Home</span>
         </Link>
         <Link to={"user"}>
-          <span className="home-page-link">Profile</span>
+          <span className={location.pathname == "/user" ? `home-page-active`:""}>Profile</span>
         </Link>
-        <Link to={"user"}>
-          <span className="home-page-link">3D View</span>
+        <Link to={"3dview"}>
+          <span className={location.pathname == "/3dview" ? `home-page-active`:""}>3D View</span>
         </Link>
         <Popover content={popoverContent} placement="bottom" title={null}>
           <img src={loinIcon} alt="" />

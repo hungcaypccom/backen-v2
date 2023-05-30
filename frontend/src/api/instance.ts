@@ -2,7 +2,7 @@ import axios from "axios";
 import { BaseURL, BaseURLLocal } from "config";
 
 export const authInstance = axios.create({
-  baseURL: BaseURL,
+  baseURL: BaseURLLocal,
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Credentials": true,
@@ -11,7 +11,7 @@ export const authInstance = axios.create({
 });
 
 export const userInstance = axios.create({
-  baseURL: BaseURL,
+  baseURL: BaseURLLocal,
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Credentials": true,

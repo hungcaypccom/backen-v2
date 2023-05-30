@@ -77,7 +77,7 @@ const Password: React.FC = () => {
           />
         </Form.Item>
         <Form.Item>
-          <Button type="primary">Save</Button>
+          <Button htmlType="submit" type="primary">Save</Button>
         </Form.Item>
       </Form>
     </div>

@@ -1,5 +1,5 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Popconfirm, Select } from "antd";
 import Input from "antd/es/input/Input";
 import { ColumnsType } from "antd/es/table";
@@ -12,17 +12,21 @@ import { useInView } from 'react-intersection-observer'
 
 const Main: React.FC = () => {
   const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
   const { ref, inView } = useInView()
   const [downloadable, setDownloadable] = useState(true)
-  const getDataTable = async () => {
+  const queryClient = useQueryClient()
+  const getDataTable = async ({pageParam = 1}) => {
     const res = await getDataProxy({
       downloadable: downloadable,
-      page: 1,
+      page: pageParam,
       count: 20,
     });
     return res;
   };
+
+  const handleDelete = async (fileId: string) => {
+    await deleteFileProxy(fileId);
+   };
 
 const {
     status,
@@ -43,13 +47,18 @@ const {
       getNextPageParam: (lastPage) => lastPage.nextId ?? undefined,
   });
 
+  const mutation = useMutation({
+    mutationFn: handleDelete,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["data"] });
+    },
+  });
+
   const handleDownload = async (fileId: string) => {
     let res = await downloadFileProxy(fileId);
   };
 
-  const handleDelete = async (fileId: string) => {
-    let res = await deleteFileProxy(fileId);
-  };
+ 
 
   const handleSearch = () => {
     if(data !== undefined && Array.isArray(data)) {
@@ -98,17 +107,7 @@ const {
       align: "center",
       width: "15%",
 
-      render: (text: string, record: Data) => <span>{record.created_at}</span>,
-    },
-    {
-      title: "Modified at",
-      dataIndex: "modified_at",
-      align: "center",
-      width: "15%",
-
-      render: (text: string, record: Data) => {
-        return <span>{record.modified_at}</span>;
-      },
+      render: (text: string, record: Data) => <span>{record.createTime}</span>,
     },
     {
       title: "Action",
@@ -132,7 +131,7 @@ const {
               title="Do you want to delete this record"
               okText="Yes"
               cancelText="No"
-              onConfirm={() => handleDelete(record.uploadTimeStr)}
+              onConfirm={() => mutation.mutate(record.uploadTimeStr)}
             >
               <Button type="default" danger>
                 Delete
@@ -169,9 +168,7 @@ const {
             >
               {isFetchingNextPage
                 ? 'Loading more...'
-                : hasNextPage
-                ? 'Load Newer'
-                : 'Nothing more to load'}
+               : null}
             </div>
     </div>
   );
