@@ -1,13 +1,14 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import React from "react";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";
-import { editUserPasswordProxy } from "proxy";
+import { editUserPasswordProxy } from "services/proxy";
 import { PasswordStruct } from "interface/user";
 
 const Password: React.FC = () => {
   const editUserPassword = async (value: PasswordStruct) => {
-    await editUserPasswordProxy(value);
+    let res = await editUserPasswordProxy(value);
+    if(res) message.success(res)
   };
 
   const mutation = useMutation({
@@ -17,8 +18,8 @@ const Password: React.FC = () => {
     <div className="user-password">
       <p>Update password</p>
       <Form
-        onFinish={(value) => {
-          if (value.new_password === value.old_password && value.new_password !== "") {
+        onFinish={(value) => {          
+          if (value.new_password === value.new_password_confirm && value.new_password !== "") {
             mutation.mutate({
               new_password: value.new_password,
               old_password: value.old_password,

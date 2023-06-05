@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import "./LoginForm.styles.css";
-import { loginProxy } from "proxy/auth";
+import { loginProxy } from "services/proxy/auth";
 import { LoginInput } from "interface/auth";
 import { example_account, TOKEN_KEY } from "config";
 
@@ -18,7 +18,8 @@ export const LoginForm: React.FC = () => {
   const handleSubmit = async (values: LoginInput) => {
     let res = await loginProxy(values);
     console.log("login success", res);
-    if (res.status === 200) {
+    if (res === true) {
+      message.success("Login successfully")
       navigate("/", { replace: true });
     }
   };

@@ -1,13 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button, Form, Input } from "antd";
-import { useForm } from "antd/es/form/Form";
+import { Button, Form, Input, message } from "antd";
+import { FormInstance, useForm } from "antd/es/form/Form";
 import { UserProfile } from "interface/user";
-import { editUserProfileProxy, getUserProfileProxy } from "proxy";
-import React from "react";
+import { editUserProfileProxy, getUserProfileProxy } from "services/proxy";
+import React, { useEffect } from "react";
 
 const Information: React.FC = () => {
   const { TextArea } = Input;
-  const form: any = useForm();
+  const [form] = Form.useForm();
   const queryClient = useQueryClient();
 
   const getUserProfile = async () => {
@@ -16,7 +16,10 @@ const Information: React.FC = () => {
   };
 
   const editUserProfile = async (value: UserProfile) => {
-    await editUserProfileProxy(value);
+    let res = await editUserProfileProxy(value);
+    if (res) {
+      message.success(res);
+    }
   };
 
   const dataQuery = useQuery({
@@ -31,12 +34,14 @@ const Information: React.FC = () => {
     },
   });
 
-  const initValue = {
-    name: Boolean(dataQuery.data) ? dataQuery.data?.name : "",
-    phone: Boolean(dataQuery.data) ? dataQuery.data?.phone_number : "",
-    address: Boolean(dataQuery.data) ? dataQuery.data?.adress : "",
-    website: Boolean(dataQuery.data) ? dataQuery.data?.website : "",
-  };
+  useEffect(() => {
+    if (dataQuery.data) {
+      console.log("setform", dataQuery.data);
+      form.setFieldsValue(dataQuery.data);
+      console.log("form value", form.getFieldValue("phone_number"));
+    }
+  }, [form, dataQuery.data]);
+
   return (
     <div className="user-informations">
       <p className="user-category-name">Account information</p>
@@ -44,12 +49,17 @@ const Information: React.FC = () => {
         onFinish={(value) => {
           mutation.mutate(value);
         }}
-        initialValues={initValue}
+        form={form}
       >
-        <Form.Item rules={[{ required: true }]} name="name" label="Name">
+        <Form.Item
+          rules={[{ required: true }]}
+          name="name"
+          label="Name"
+        >
           <Input />
         </Form.Item>
         <Form.Item
+        
           rules={[{ required: true }]}
           name="phone_number"
           label="Phone"
@@ -57,17 +67,25 @@ const Information: React.FC = () => {
           <Input />
         </Form.Item>
         <Form.Item
+        
           rules={[{ required: true }]}
           name="website"
           label="Website"
         >
           <Input />
         </Form.Item>
-        <Form.Item rules={[{ required: true }]} name="adress" label="Address">
+        <Form.Item
+          
+          rules={[{ required: true }]}
+          name="adress"
+          label="Address"
+        >
           <TextArea rows={4} />
         </Form.Item>
         <Form.Item>
-          <Button htmlType="submit" type="primary">Save</Button>
+          <Button htmlType="submit" type="primary">
+            Save
+          </Button>
         </Form.Item>
       </Form>
     </div>

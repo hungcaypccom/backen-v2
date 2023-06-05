@@ -1,8 +1,11 @@
+import { message } from "antd";
 import axios from "axios";
 import { BaseURL, BaseURLLocal } from "config";
+import { redirect } from "react-router-dom";
+
 
 export const authInstance = axios.create({
-  baseURL: BaseURLLocal,
+  baseURL: BaseURL,
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Credentials": true,
@@ -11,7 +14,7 @@ export const authInstance = axios.create({
 });
 
 export const userInstance = axios.create({
-  baseURL: BaseURLLocal,
+  baseURL: BaseURL,
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Credentials": true,

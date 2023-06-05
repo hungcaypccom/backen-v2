@@ -1,27 +1,49 @@
 import { Popover } from "antd";
-import { TOKEN_KEY } from "config";
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import loinIcon from "../../assets/login.svg";
 import logoIcon from "../../assets/logo.png";
+import { deleteAllCookies } from "utils/utils";
+import useIsMobile from "hooks/useIsMobile";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation()
-  console.log("location", location);
-  
+  const location = useLocation();
+  const isMobile = useIsMobile();
   const popoverContent = (
-    <>
-      <span
-        style={{ cursor: "pointer" }}
-        onClick={() => {
-          localStorage.removeItem(TOKEN_KEY);
-          navigate("/login", { replace: true });
-        }}
-      >
-        Logout
-      </span>
-    </>
+    <div className="home-page-header-popover">
+      {isMobile ? (
+        <>
+          <Link to={"/"}>
+            <span
+            >
+              Home
+            </span>
+          </Link>
+          <Link to={"user"}>
+            <span
+            >
+              Profile
+            </span>
+          </Link>
+          <Link to={"aisimulation"}>
+            <span
+            >
+              AI Simulation
+            </span>
+          </Link>
+        </>
+      ) : null}
+      <Link to={"login"}>
+        <span
+          onClick={() => {
+            deleteAllCookies();
+          }}
+        >
+          Logout
+        </span>
+      </Link>
+    </div>
   );
   return (
     <div className="home-page-header">
@@ -29,15 +51,32 @@ const Header: React.FC = () => {
         <img className="home-page-logo" src={logoIcon} alt="" />
       </div>
       <div className="home-page-navigate">
-        <Link to={"/"}>
-          <span className={location.pathname == "/" ? `home-page-active`:""}>Home</span>
-        </Link>
-        <Link to={"user"}>
-          <span className={location.pathname == "/user" ? `home-page-active`:""}>Profile</span>
-        </Link>
-        <Link to={"3dview"}>
-          <span className={location.pathname == "/3dview" ? `home-page-active`:""}>3D View</span>
-        </Link>
+        {!isMobile ? (
+          <>
+            <Link to={"/"}>
+              <span
+                className={location.pathname == "/" ? `home-page-active` : ""}
+              >
+                Home
+              </span>
+            </Link>
+            <Link to={"user"}>
+              <span
+                className={
+                  location.pathname == "/user" ? `home-page-active` : ""
+                }
+              >
+                Profile
+              </span>
+            </Link>
+            <Link to={"aisimulation"}>
+            <span
+            >
+              AI Simulation
+            </span>
+          </Link>
+          </>
+        ) : null}
         <Popover content={popoverContent} placement="bottom" title={null}>
           <img src={loinIcon} alt="" />
         </Popover>
