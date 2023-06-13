@@ -234,6 +234,7 @@ const Main: React.FC = () => {
           current: downloadCursor,
           pageSize: 20,
           onChange: handleClickPagination,
+          showSizeChanger: false
         }}
       />
     </div>

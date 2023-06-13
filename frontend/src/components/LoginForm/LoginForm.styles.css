@@ -30,3 +30,10 @@
 .form-login-admin {
     background-color: #1A2640
 }
+
+@media screen and (max-width: 768px) {
+    .form-login, .form-login-submit {
+        width: 90%;
+
+}
+}

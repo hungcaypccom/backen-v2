@@ -13,7 +13,7 @@ export const getDataProxy = async (param: GetDataParam) => {
     let res = await getDataApi(param);
     if (res.status === 200) {
       return res.data?.detail;
-    } else {
+    } else if(res.status !== 401) {
       message.error(res.data?.detail)
       return [];
     }
@@ -27,7 +27,7 @@ export const getTotalPageProxy = async (param: any) => {
     let res = await getTotalPageApi(param);
     if (res.status === 200) {
       return res.data?.detail;
-    } else {
+    } else if(res.status !== 401) {
       message.error(res.data?.detail)
     }
   } catch (err:any) {
@@ -73,7 +73,7 @@ export const deleteFileProxy = async (fileId: string | [any]) => {
     let res = await deleteFileApi(Array.isArray(fileId) ? [...fileId]: [fileId]);
     if (res.status === 200) {
       return res.data?.detail;
-    } else {
+    } else if(res.status !== 401) {
       message.error(res.data?.detail)
       return false;
     }

@@ -20,13 +20,13 @@ const Header: React.FC = () => {
               Home
             </span>
           </Link>
-          <Link to={"user"}>
+          <Link to={"/user"}>
             <span
             >
               Profile
             </span>
           </Link>
-          <Link to={"aisimulation"}>
+          <Link to={"/aisimulation"}>
             <span
             >
               AI Simulation
@@ -34,7 +34,7 @@ const Header: React.FC = () => {
           </Link>
         </>
       ) : null}
-      <Link to={"login"}>
+      <Link to={"/login"}>
         <span
           onClick={() => {
             deleteAllCookies();
@@ -60,7 +60,7 @@ const Header: React.FC = () => {
                 Home
               </span>
             </Link>
-            <Link to={"user"}>
+            <Link to={"/user"}>
               <span
                 className={
                   location.pathname == "/user" ? `home-page-active` : ""
@@ -69,7 +69,7 @@ const Header: React.FC = () => {
                 Profile
               </span>
             </Link>
-            <Link to={"aisimulation"}>
+            <Link to={"/aisimulation"}>
             <span
             >
               AI Simulation

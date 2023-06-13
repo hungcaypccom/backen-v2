@@ -3,18 +3,17 @@ import { SmileOutlined } from '@ant-design/icons';
 import { Button, Result } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
-const ComingSoon: React.FC = () => {
+const Error: React.FC = () => {
     const navigate = useNavigate()
     return (
       <div className='error-page'>
-
         <Result
           icon={<SmileOutlined />}
-          title="Our AI is under development!"
+          title="Something went wrong!"
           extra={<Button onClick={() => navigate("/")} type="primary">Back to Home</Button>}
         />
-        </div>
+      </div>
     )
 };
 
-export default ComingSoon;
+export default Error;
