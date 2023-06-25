@@ -19,4 +19,5 @@ export interface GetDataParam {
   downloadable: boolean;
   page: number;
   count: number;
+  filter: string
 }

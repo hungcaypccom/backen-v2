@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, message } from "antd";
-import "./LoginForm.styles.css";
-import { loginProxy } from "services/proxy/auth";
+import { example_account } from "config";
 import { LoginInput } from "interface/auth";
-import { example_account, TOKEN_KEY } from "config";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { loginProxy } from "services/proxy/auth";
 
 export const initValues: LoginInput = {
   username: example_account,

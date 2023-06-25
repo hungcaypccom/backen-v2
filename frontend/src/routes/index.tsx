@@ -45,9 +45,7 @@ export const AppRouter = () => {
     {
       path: "*",
       element: (
-     
           <Error />
-     
       ),
     },
     { path: "/login", element: <LoginPage /> },

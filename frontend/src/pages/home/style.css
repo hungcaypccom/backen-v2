@@ -75,5 +75,8 @@
     .home-page-navigate {
     justify-content: flex-end;
 }
+.home-page-util {
+    flex-direction: column;
+}
 }
 

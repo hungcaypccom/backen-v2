@@ -7,77 +7,69 @@ import {
   getUserProfileApi,
 } from "../api";
 import { message } from "antd";
+import { saveAs } from "file-saver";
 
 export const getDataProxy = async (param: GetDataParam) => {
   try {
     let res = await getDataApi(param);
     if (res.status === 200) {
       return res.data?.detail;
-    } else if(res.status !== 401) {
-      message.error(res.data?.detail)
+    } else if (res.status == 401) {
+      message.error("Session expired, login to continue...");
+      return false;
+    } else if (res.status !== 401) {
+      message.error(res.data?.detail);
       return [];
     }
-  } catch (err:any) {
-    message.error(err.message)
-  }
+  } catch (err: any) {}
 };
 
-export const getTotalPageProxy = async (param: any) => {
+export const getTotalPageProxy = async (param: {
+  downloadable: boolean;
+  filter: string;
+}) => {
   try {
     let res = await getTotalPageApi(param);
     if (res.status === 200) {
       return res.data?.detail;
-    } else if(res.status !== 401) {
-      message.error(res.data?.detail)
+    } else if (res.status == 401) {
+      message.error("Session expired, login to continue...");
+      return false;
+    } else if (res.status !== 401) {
+      message.error(res.data?.detail);
     }
-  } catch (err:any) {
-    message.error(err.message)
-  }
+  } catch (err: any) {}
   return false;
 };
 
-export const downloadFileProxy = async (fileId: any) => {
+export const downloadFileProxy = async (
+  input: { uploadTimeStr: string },
+  callback: Function
+) => {
   try {
-    console.log("downloading file " + fileId);
-    
-    let res = await downloadFileApi(fileId);
-    if (res.status === 200) {
-      const contentDisposition = res.headers['content-disposition'];
-      const contentType = res.headers['content-type'];
-
-      const url = window.URL.createObjectURL(new Blob([res.data],
-        { type: contentType }));      
-      const filename = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/)[1];
-      // create "a" HTML element with href to file & click
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `${filename}`); //or any other extension
-      document.body.appendChild(link);
-      link.click();
-  
-      // clean up "a" element & remove ObjectURL
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    } 
-  } catch (error:any) {
-    message.error(error.message)
-    console.log(error.message);
-  }
- 
-    return false;
-  
+    let res = await downloadFileApi(input, callback);
+  } catch (error: any) {}
+  return false;
 };
 
 export const deleteFileProxy = async (fileId: string | [any]) => {
   try {
-    let res = await deleteFileApi(Array.isArray(fileId) ? [...fileId]: [fileId]);
+    let res = await deleteFileApi(
+      Array.isArray(fileId) ? [...fileId] : [fileId]
+    );
+    console.log("rs.delete", res);
+
     if (res.status === 200) {
       return res.data?.detail;
-    } else if(res.status !== 401) {
-      message.error(res.data?.detail)
-      return false;
     }
-  } catch (err:any) {
-    message.error(err.message)
+  } catch (err: any) {
+    if (err.status === 404) {
+      message.error("File not found");
+    } else if (err.status == 401) {
+      message.error("Session expired, login to continue...");
+      return false;
+    } else {
+      message.error("Failed to delete file");
+    }
   }
 };

@@ -22,3 +22,18 @@ export const userInstance = axios.create({
     "withCredentials": true
   },
 });
+
+export const downloadInstance = axios.create({
+  baseURL: BaseURL,
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Credentials": true,
+    // 'Content-Type': 'application/zip',
+    // "Accept": 'application/zip',
+    // "content-type": "application/zip",
+
+        "withCredentials": true
+  },
+});
+
+
