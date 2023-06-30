@@ -5,10 +5,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginProxy } from "services/proxy/auth";
 
-export const initValues: LoginInput = {
-  username: example_account,
-  password: "string",
-};
+// export const initValues: LoginInput = {
+//   username: example_account,
+//   password: "string",
+// };
 
 export const LoginForm: React.FC = () => {
   const navigate = useNavigate();
@@ -16,9 +16,8 @@ export const LoginForm: React.FC = () => {
 
   const handleSubmit = async (values: LoginInput) => {
     let res = await loginProxy(values);
-    console.log("login success", res);
     if (res === true) {
-      message.success("Login successfully")
+      message.success("Login successfully");
       navigate("/", { replace: true });
     }
   };
@@ -28,14 +27,15 @@ export const LoginForm: React.FC = () => {
       layout="vertical"
       onFinish={handleSubmit}
       requiredMark="optional"
-      initialValues={initValues}
       className="form-login"
     >
       <div className="form-title">Login</div>
       <Form.Item
         name="username"
-        label={"Username"}
-        rules={[{ required: true, message: `${"Please enter your username"}` }]}
+        label={"User name"}
+        rules={[
+          { required: true, message: `${"Please enter your user name"}` },
+        ]}
       >
         <Input className="form-login-input" placeholder={`${"email"}`} />
       </Form.Item>
@@ -61,7 +61,7 @@ export const LoginForm: React.FC = () => {
           {"Login"}
         </Button>
       </Form.Item>
-      <Form.Item noStyle>
+      {/* <Form.Item noStyle>
         <Button
           className="form-login-submit form-login-admin"
           type="primary"
@@ -70,7 +70,7 @@ export const LoginForm: React.FC = () => {
         >
           {"Login as Admin"}
         </Button>
-      </Form.Item>
+      </Form.Item> */}
     </Form>
   );
 };

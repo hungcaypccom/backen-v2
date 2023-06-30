@@ -10,7 +10,6 @@ import {
   Popconfirm,
   Select,
   Space,
-  Spin,
   Tooltip,
   message,
 } from "antd";
@@ -34,7 +33,7 @@ const Main: React.FC = () => {
   const [search, setSearch] = useState("");
   const [downloadable, setDownloadable] = useState(false);
   const [downloadCursor, setDownloadCursor] = useState(1);
-  const [selectedRowKeys, setSelectedRowKeys] = useState<[any]>();
+  const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>();
   const isMobile = useIsMobile();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -56,8 +55,7 @@ const Main: React.FC = () => {
   };
 
   const handleDelete = async (fileId: string | [any]) => {
-    let res = await deleteFileProxy(fileId);
-    if (res) message.success(res);
+    await deleteFileProxy(fileId);
   };
 
   const totalPageQuery = useQuery({
@@ -83,12 +81,16 @@ const Main: React.FC = () => {
   };
 
   const handleDownload = async (fileId: string) => {
-    setLoading(true);
-    await downloadFileProxy({ uploadTimeStr: fileId }, handleLogout);
-    setLoading(false);
+    await downloadFileProxy(
+      { uploadTimeStr: fileId },
+      handleLogout,
+      (status: boolean) => {
+        setLoading(status);
+      }
+    );
   };
 
-  const onSelectChange = (newSelectedRowKeys: [any]) => {
+  const onSelectChange = (newSelectedRowKeys: any[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
@@ -145,17 +147,15 @@ const Main: React.FC = () => {
         return (
           <Space>
             <Tooltip title={"Download"}>
-              <Spin spinning={loading}>
-                <Button
-                  disabled={
-                    !(record?.status && record?.downloadable) || loading
-                  }
-                  type="default"
-                  style={{ marginRight: "10px" }}
-                  onClick={() => handleDownload(record?.uploadTimeStr)}
-                  icon={<DownloadOutlined />}
-                />
-              </Spin>
+              <Button
+                disabled={!(record?.status && record?.downloadable) || loading}
+                type="default"
+                style={{ marginRight: "10px" }}
+                onClick={() => {
+                  handleDownload(record?.uploadTimeStr);
+                }}
+                icon={<DownloadOutlined />}
+              />
             </Tooltip>
             <Popconfirm
               placement="top"
@@ -189,7 +189,13 @@ const Main: React.FC = () => {
       <div className="home-page-util">
         <Form
           onFinish={(value) => {
-            setSearch(value.filter);
+            console.log("searching...", value);
+
+            if (value.filter) {
+              setSearch(value.filter);
+            } else {
+              setSearch("");
+            }
           }}
           layout="inline"
           style={{ width: "100%", flexGrow: "1" }}
@@ -218,7 +224,11 @@ const Main: React.FC = () => {
 
         <Select
           value={downloadable}
-          onChange={(v) => setDownloadable(v)}
+          onChange={(v) => {
+            setSelectedRowKeys([]);
+            setDownloadCursor(1);
+            setDownloadable(v);
+          }}
           options={options}
           style={{
             width: isMobile ? "100%" : "25%",

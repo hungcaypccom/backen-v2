@@ -21,7 +21,7 @@ export const ResponseInterceptor: React.FC<Props> = ({ children }) => {
           case 401:
             navigate("/login");
             break;
-          case 404: 
+          default: return error
         }
       }
     );

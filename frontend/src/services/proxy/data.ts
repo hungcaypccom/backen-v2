@@ -1,13 +1,11 @@
+import { message } from "antd";
 import { GetDataParam } from "interface/data";
 import {
   deleteFileApi,
   downloadFileApi,
   getDataApi,
   getTotalPageApi,
-  getUserProfileApi,
 } from "../api";
-import { message } from "antd";
-import { saveAs } from "file-saver";
 
 export const getDataProxy = async (param: GetDataParam) => {
   try {
@@ -15,9 +13,11 @@ export const getDataProxy = async (param: GetDataParam) => {
     if (res.status === 200) {
       return res.data?.detail;
     } else if (res.status == 401) {
+      message.destroy();
       message.error("Session expired, login to continue...");
       return false;
     } else if (res.status !== 401) {
+      message.destroy();
       message.error(res.data?.detail);
       return [];
     }
@@ -33,9 +33,11 @@ export const getTotalPageProxy = async (param: {
     if (res.status === 200) {
       return res.data?.detail;
     } else if (res.status == 401) {
+      message.destroy();
       message.error("Session expired, login to continue...");
       return false;
     } else if (res.status !== 401) {
+      message.destroy();
       message.error(res.data?.detail);
     }
   } catch (err: any) {}
@@ -44,10 +46,11 @@ export const getTotalPageProxy = async (param: {
 
 export const downloadFileProxy = async (
   input: { uploadTimeStr: string },
-  callback: Function
+  callback: Function,
+  loadingFunc: Function
 ) => {
   try {
-    let res = await downloadFileApi(input, callback);
+    let res = await downloadFileApi(input, callback, loadingFunc);
   } catch (error: any) {}
   return false;
 };
@@ -57,19 +60,17 @@ export const deleteFileProxy = async (fileId: string | [any]) => {
     let res = await deleteFileApi(
       Array.isArray(fileId) ? [...fileId] : [fileId]
     );
-    console.log("rs.delete", res);
+    console.log("deleteFileProxy", res, res.status);
 
     if (res.status === 200) {
-      return res.data?.detail;
+      message.destroy();
+      message.error("Deleted file successfully");
+    } else if (res.response.status === 404) {
+      message.destroy();
+      message.error("File not found");
+    } else {
     }
   } catch (err: any) {
-    if (err.status === 404) {
-      message.error("File not found");
-    } else if (err.status == 401) {
-      message.error("Session expired, login to continue...");
-      return false;
-    } else {
-      message.error("Failed to delete file");
-    }
+    console.log(err);
   }
 };

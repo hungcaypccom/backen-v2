@@ -7,17 +7,21 @@ export const loginProxy = async (loginInput: LoginInput) => {
     username: loginInput.username,
     password: loginInput.password,
   };
-  
+
   try {
     let loginJSON = JSON.stringify(loginData);
     let res = await loginApi(loginJSON);
+    console.log("login", res);
     if (res.status === 200) {
       return true;
     } else {
-      message.error(res.data?.detail)
+      message.error(res.data?.detail);
       return false;
     }
-  } catch (err:any) {
-    message.error(err.message)
+  } catch (err: any) {
+   
+    message.error(
+      !!err.response?.data?.detail ? err?.response?.data?.detail : err.message
+    );
   }
 };

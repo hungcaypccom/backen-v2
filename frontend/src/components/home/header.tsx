@@ -47,7 +47,7 @@ const Header: React.FC = () => {
   );
   return (
     <div className="home-page-header">
-      <div className="home-page-img">
+      <div className="home-page-img" onClick={() => navigate("/", {replace: true})}>
         <img className="home-page-logo" src={logoIcon} alt="" />
       </div>
       <div className="home-page-navigate">

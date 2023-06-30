@@ -55,6 +55,7 @@
 }
 
 .home-page-logo {
+    cursor: pointer;
     width: 146px;
 }
 

@@ -12,7 +12,6 @@ export const Tables: React.FC<Props> = ({ columns, tableData, rowKey, pagination
   return (
     <>
       <Table
-      
         rowKey={rowKey}
         columns={columns}
         dataSource={tableData}
